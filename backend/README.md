@@ -119,12 +119,18 @@ nothing to configure by hand:
 
 - **File store** (`src/lib/fileStore.ts`) — a dependency-free JSON file at
   `backend/data/consultations.json`. Used whenever `UPSTASH_REDIS_REST_URL` /
-  `UPSTASH_REDIS_REST_TOKEN` aren't set. This is the path for Render, local dev, a VPS, or any
-  host with a writable persistent filesystem.
+  `UPSTASH_REDIS_REST_TOKEN` aren't set. Only actually persists on hosts with a genuinely
+  persistent, writable filesystem: local dev, a VPS, or Render **with a paid instance type and a
+  disk attached**. On Render's free tier specifically, the filesystem is wiped on every spin-down
+  (roughly every 15 minutes of inactivity), not just on redeploys — so this path silently loses
+  data there unless you either upgrade + attach a disk, or connect Upstash (below), which works on
+  Render's free tier too. See "Deploying to Render" in the root README for both options.
 - **Upstash Redis store** (`src/lib/kvStore.ts`) — used automatically when those env vars *are*
-  set, which Vercel does for you once you connect an Upstash Redis integration (see "Deploying to
-  Vercel" in the root README). This path exists because Vercel functions are stateless — there's
-  no local disk to persist a JSON file to.
+  set. Vercel sets them for you once you connect an Upstash Redis integration (see "Deploying to
+  Vercel" in the root README) — this exists in the first place because Vercel functions are
+  stateless. Nothing about it is Vercel-specific, though: the same env vars work identically if
+  set by hand on Render (or anywhere else), which is the recommended fix for Render's free-tier
+  persistence gap above.
 
 Both implement the same `ConsultationStore` interface (see `src/types.ts`), so the routes never
 know or care which one is active.

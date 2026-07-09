@@ -81,12 +81,29 @@ export function Cart() {
       )
     );
 
-    const failed = results.filter((r) => r.status === "rejected");
-    if (failed.length === results.length) {
-      // Every request failed — nothing succeeded, let the client retry cleanly.
-      const first = failed[0] as PromiseRejectedResult;
+    const succeededDivisions = divisions.filter((_, i) => results[i].status === "fulfilled");
+    const failedDivisions = divisions.filter((_, i) => results[i].status === "rejected");
+
+    if (succeededDivisions.length === 0) {
+      // Nothing went through — leave the whole cart intact and let the client retry cleanly.
+      const first = results.find((r) => r.status === "rejected") as PromiseRejectedResult | undefined;
       setStatus("error");
-      setError(first.reason instanceof ApiError ? first.reason.message : "Something went wrong. Please try again.");
+      setError(first?.reason instanceof ApiError ? first.reason.message : "Something went wrong. Please try again.");
+      return;
+    }
+
+    // Only remove what actually made it through — a partial failure (e.g. one division's
+    // request got rate-limited) must never silently disappear from the client's cart.
+    for (const item of items) {
+      if (succeededDivisions.includes(item.division)) remove(item.key);
+    }
+
+    if (failedDivisions.length > 0) {
+      const names = failedDivisions.map((d) => DIVISION_LABEL[d]).join(", ");
+      setStatus("error");
+      setError(
+        `${DIVISION_LABEL[succeededDivisions[0]]} request sent, but ${names} didn't go through — it's still in your cart below. Please try checking out again.`
+      );
       return;
     }
 

@@ -17,9 +17,12 @@ const STATUSES: ConsultationStatus[] = ["new", "contacted", "in_progress", "clos
 
 // Public endpoint — one submission every 30s per IP is plenty for a real visitor,
 // and blunts basic spam/scraping without needing a captcha.
+// Public endpoint. A single cart checkout can legitimately fire one request per division
+// present in the cart (currently up to 2 — DigitizeBiz + CitizenEase), so this allows a small
+// burst rather than 1, while still being far tighter than anything a spam script would respect.
 const submitLimiter = rateLimit({
   windowMs: 30 * 1000,
-  limit: 1,
+  limit: 5,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Please wait a moment before submitting again." },

@@ -161,17 +161,35 @@ this project to a GitHub, GitLab, or Bitbucket repo first.
 
 ### The trade-off on the free tier: consultations don't persist
 
-Free Render web services have no persistent disk — the backend's JSON-file storage
-(`backend/data/consultations.json`) resets every time the service redeploys or spins down from
-inactivity (free services sleep after 15 minutes idle and cold-start on the next request; that
-alone doesn't lose data, but a redeploy or manual restart does). For getting the site live and the
-forms working, this is a fine starting point. It's not fine for actually relying on submitted
-consultations long-term.
+**Correction from an earlier version of this doc:** Free Render web services have no persistent
+disk, and — contrary to what this section said before — that filesystem is wiped on **every**
+spin-down, not just on redeploys or manual restarts. Render's own docs are explicit about this:
+free services spin down after 15 minutes of inactivity, and "any changes to your web service's
+filesystem... are lost every time the service redeploys, restarts, **or spins down**." In
+practice, that means the JSON file store resets roughly every 15 minutes of no traffic — which is
+almost certainly why consultations weren't showing up in `/admin`: by the time anyone checked, the
+free service had very likely spun down and back up at least once since the submission came in.
 
-**When you're ready for real persistence**, upgrade the backend service to a paid instance type
-(Starter or above) and add a disk — either in the Dashboard (Settings → Disks → Add Disk, mount
-path `/opt/render/project/src/backend/data`, then update `startCommand`/`buildCommand` if
-prompted), or in `render.yaml`:
+**The fix that stays free — connect Upstash Redis to Render too.** The backend already has a
+Redis-backed store (`backend/src/lib/kvStore.ts`) built for Vercel, and it auto-activates whenever
+`UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` are set — regardless of which host reads them.
+Upstash isn't Vercel-exclusive; you can connect it here too, no code changes needed:
+
+1. Go to [upstash.com](https://upstash.com) → create a free account → **Create Database** (Redis).
+2. From the database's dashboard, copy the **REST URL** and **REST Token**.
+3. Render Dashboard → backend service → **Environment** → add:
+   ```
+   UPSTASH_REDIS_REST_URL=<paste>
+   UPSTASH_REDIS_REST_TOKEN=<paste>
+   ```
+4. Save — this triggers a redeploy. From then on, `store.ts` picks the Redis-backed store
+   automatically, and consultations survive spin-downs, restarts, and redeploys alike, all on free
+   tiers on both sides (Render's free web service + Upstash's free Redis database).
+
+**The paid alternative**, if you'd rather not add a third-party dependency: upgrade the backend to
+a paid instance type (Starter or above) and add a persistent disk — either in the Dashboard
+(Settings → Disks → Add Disk, mount path `/opt/render/project/src/backend/data`, then update
+`startCommand`/`buildCommand` if prompted), or in `render.yaml`:
 
 ```yaml
 plan: starter
