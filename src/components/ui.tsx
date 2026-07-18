@@ -1,10 +1,38 @@
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 
 export function cn(...classes: (string | false | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 type Tone = "teal" | "clay";
+
+const TILE_SIZE = {
+  sm: { box: "w-9 h-9", icon: 16, radius: "rounded-lg" },
+  md: { box: "w-11 h-11", icon: 20, radius: "rounded-xl" },
+  lg: { box: "w-14 h-14", icon: 26, radius: "rounded-2xl" },
+} as const;
+
+export function IconTile({
+  icon: Icon,
+  tone = "teal",
+  size = "md",
+  className,
+}: {
+  icon: LucideIcon;
+  tone?: Tone;
+  size?: keyof typeof TILE_SIZE;
+  className?: string;
+}) {
+  const s = TILE_SIZE[size];
+  const bg = tone === "teal" ? "bg-teal-soft dark:bg-teal/20" : "bg-clay-soft dark:bg-clay/20";
+  const fg = tone === "teal" ? "text-teal" : "text-clay";
+  return (
+    <div className={cn(s.box, s.radius, "flex items-center justify-center flex-shrink-0", bg, className)}>
+      <Icon size={s.icon} className={fg} />
+    </div>
+  );
+}
 
 export function Pill({ children, tone = "teal" }: { children: ReactNode; tone?: Tone }) {
   const toneClasses =

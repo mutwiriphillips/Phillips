@@ -1,5 +1,5 @@
 import { Check, Plus, ShoppingCart } from "lucide-react";
-import { Card, Pill, Eyebrow, Btn } from "../components/ui";
+import { Card, Pill, Eyebrow, Btn, IconTile } from "../components/ui";
 import { bizServices } from "../data/services";
 import { DigitizationPreview } from "../components/DigitizationPreview";
 import { ROICalculator } from "../components/ROICalculator";
@@ -42,7 +42,7 @@ export function DigitizeBiz() {
           const inCart = has("digitizebiz", s.title);
           return (
             <Card key={s.title} className="flex flex-col">
-              <s.icon size={20} className="mb-3 text-teal" />
+              <IconTile icon={s.icon} tone="teal" size="md" className="mb-3" />
               <p className="font-display text-lg mb-1 text-ink dark:text-[#EDE9DD]">{s.title}</p>
               <p className="text-sm text-[#6B6153] dark:text-[#9AA3B5] mb-4 flex-1">{s.desc}</p>
               <button

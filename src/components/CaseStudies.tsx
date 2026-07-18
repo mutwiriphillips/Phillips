@@ -1,5 +1,5 @@
 import { Check, User } from "lucide-react";
-import { Card, Eyebrow, Pill } from "./ui";
+import { Card, Eyebrow, Pill, IconTile } from "./ui";
 import { caseStudies } from "../data/caseStudies";
 
 const founderSkills = [
@@ -70,9 +70,7 @@ export function CaseStudies() {
       </div>
 
       <Card className="mt-6 flex flex-col sm:flex-row gap-5 items-start">
-        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-teal-soft dark:bg-teal/20">
-          <User size={20} className="text-teal" />
-        </div>
+        <IconTile icon={User} tone="teal" size="md" />
         <div>
           <p className="text-xs font-bold uppercase tracking-wider mb-1 text-teal">Behind DigitizeBiz</p>
           <p className="text-sm mb-3 text-[#6B6153] dark:text-[#9AA3B5]">

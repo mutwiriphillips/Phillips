@@ -1,5 +1,5 @@
 import { ChevronRight, Globe2, Plus, ShoppingCart } from "lucide-react";
-import { Card, Pill, Eyebrow } from "../components/ui";
+import { Card, Pill, Eyebrow, IconTile } from "../components/ui";
 import { citizenCategories } from "../data/services";
 import { DocumentChecklist } from "../components/DocumentChecklist";
 import { ContactBlock } from "../components/ContactBlock";
@@ -31,7 +31,7 @@ export function CitizenEase() {
       <section className="max-w-6xl mx-auto px-5 sm:px-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-16">
         {citizenCategories.map((c) => (
           <Card key={c.title}>
-            <c.icon size={20} className="mb-3 text-clay" />
+            <IconTile icon={c.icon} tone="clay" size="lg" className="mb-4" />
             <p className="font-display text-lg mb-2 text-ink dark:text-[#EDE9DD]">{c.title}</p>
             <ul className="space-y-2">
               {c.items.map((it) => {
@@ -69,10 +69,8 @@ export function CitizenEase() {
         <DocumentChecklist />
         <Card>
           <Eyebrow tone="teal">Extension</Eyebrow>
-          <div className="flex items-center gap-2 mb-2">
-            <Globe2 size={18} className="text-teal" />
-            <h3 className="font-display text-2xl text-ink dark:text-[#EDE9DD]">Diaspora Concierge</h3>
-          </div>
+          <IconTile icon={Globe2} tone="teal" size="md" className="mb-3" />
+          <h3 className="font-display text-2xl mb-2 text-ink dark:text-[#EDE9DD]">Diaspora Concierge</h3>
           <p className="text-sm mb-4 text-[#6B6153] dark:text-[#9AA3B5]">
             Living abroad? We handle the in-person half of the process in Kenya — biometrics,
             document collection, physical submission — while you manage the online side from

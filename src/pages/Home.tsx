@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Contact, Sparkles } from "lucide-react";
-import { Card, Pill } from "../components/ui";
+import { Card, Pill, IconTile } from "../components/ui";
 
 export function Home() {
   return (
@@ -23,9 +23,7 @@ export function Home() {
       <section className="max-w-6xl mx-auto px-5 sm:px-8 grid sm:grid-cols-2 gap-6 pb-20">
         <Link to="/digitizebiz" className="text-left group block">
           <Card className="h-full transition-transform group-hover:-translate-y-1 border-[1.5px] border-teal">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 bg-teal-soft dark:bg-teal/20">
-              <Briefcase size={20} className="text-teal" />
-            </div>
+            <IconTile icon={Briefcase} tone="teal" size="lg" className="mb-5" />
             <p className="text-xs font-bold uppercase tracking-wider mb-1 text-teal">
               Division A · Business Assets
             </p>
@@ -42,9 +40,7 @@ export function Home() {
 
         <Link to="/citizenease" className="text-left group block">
           <Card className="h-full transition-transform group-hover:-translate-y-1 border-[1.5px] border-clay">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 bg-clay-soft dark:bg-clay/20">
-              <Contact size={20} className="text-clay" />
-            </div>
+            <IconTile icon={Contact} tone="clay" size="lg" className="mb-5" />
             <p className="text-xs font-bold uppercase tracking-wider mb-1 text-clay">
               Division B · Individual Assets
             </p>
