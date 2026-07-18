@@ -3,6 +3,7 @@ import { Card, Pill, Eyebrow, Btn } from "../components/ui";
 import { bizServices } from "../data/services";
 import { DigitizationPreview } from "../components/DigitizationPreview";
 import { ROICalculator } from "../components/ROICalculator";
+import { CaseStudies } from "../components/CaseStudies";
 import { ContactBlock } from "../components/ContactBlock";
 import { useCart } from "../lib/cart";
 
@@ -96,6 +97,8 @@ export function DigitizeBiz() {
           </div>
         </Card>
       </section>
+
+      <CaseStudies />
 
       <ContactBlock
         tone="teal"

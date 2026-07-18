@@ -66,6 +66,7 @@ src/
     ContactBlock.tsx          General consultation form — POSTs to the backend, shows loading/success/error
     DigitizationPreview.tsx   DigitizeBiz signature tool — draggable ledger → dashboard slider
     ROICalculator.tsx         DigitizeBiz signature tool — monthly value-recovered calculator
+    CaseStudies.tsx           DigitizeBiz proof-of-work section — real project case study + founder credibility note
     DocumentChecklist.tsx     CitizenEase signature tool — required-documents checklist per service
     theme-provider.tsx        next-themes wrapper (light/dark)
   pages/
@@ -82,6 +83,7 @@ src/
     cart.tsx                   Cart context — persists selected services in localStorage
   data/
     services.ts                 DigitizeBiz service list + CitizenEase categories, both with docs[]
+    caseStudies.ts               Case study content shown on the DigitizeBiz page — add more entries here
 
 backend/
   src/app.ts                    Express app factory (routes/middleware — no .listen())
